@@ -10,7 +10,7 @@ class Node
 		@output_id = output_id
 		@edge_state1 = edge_state1
 		@edge_state2 = edge_state2
-		@init_edge_states = []
+		@init_edge_states = [@edge_state1, @edge_state2]
 	end
 
 	def activation

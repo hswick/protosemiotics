@@ -19,8 +19,9 @@
 #This surplus value is okay, allows for growth and future interesting things
 
 require './network'
+require './genetic_algorithm'
 
-@net = Network.new
+@net = Network.new(10)
 
 def output_event_queue
 	print @net.event_queue.to_s + "\n"
@@ -28,4 +29,13 @@ end
 
 @net.simulate
 
-@net.dump_log
+#@net.dump_log
+
+genes = @net.to_genes
+
+@net2 = Network.new.from_genes(genes)
+
+@net2.simulate
+
+@net2.dump_log
+

@@ -3,19 +3,12 @@ require './node'
 #Gene [act_id, out_id, init_value1, init_value2]
 #Id_range is the max number of genes in a chromosome (genome)
 class Network
-	def initialize(num_nodes=10, id_range = 5, num_act_fns=5)
+	def initialize(num_nodes=0, id_range = 100, num_act_fns=5)
 		@nodes = {}
 		for i in 0..num_nodes
 			@nodes[i] = Node.new(i, rand(num_act_fns), rand(id_range), rand_weight, rand_weight)
 		end
 
-		setup_state
-	end
-
-	def from_genes(genes)
-		genes.each_with_index do |gene, i|
-			@nodes[i] = Node.new(i, gene[0], gene[1], gene[2], gene[3])
-		end
 		setup_state
 	end
 
@@ -103,6 +96,7 @@ class Network
 			stopped = timestep
 			i+=1
 		end
+		i
 	end
 
 	def dump_log
@@ -115,10 +109,18 @@ class Network
 
 	def to_genes
 		genes = []
-		for i in 0..nodes.length
+		for i in 0..nodes.length-1
 			genes << nodes[i].to_gene
 		end
 		genes
+	end
+
+	def from_genes(genes)
+		genes.each_with_index do |gene, i|
+			@nodes[i] = Node.new(i, gene[0], gene[1], gene[2], gene[3])
+		end
+		setup_state
+		self
 	end
 
 	def nodes
