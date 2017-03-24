@@ -13,9 +13,11 @@ class Node
 		@init_edge_states = [@edge_state1, @edge_state2]
 	end
 
-	def activation
+	def activate
 		if active?
-			result = Act_Fns::AF[@activation][[@edge_state1, @edge_state2]]
+			if Act_Fns::AF[@activation].include? [@edge_state1, @edge_state2]
+				result = Act_Fns::AF[@activation][[@edge_state1, @edge_state2]]
+			end
 			if result != nil
 				#Clear edge states (from ALA)
 				@edge_state1 = nil
@@ -35,7 +37,10 @@ class Node
 	#packet = to, from, val
 	def push_activation(event_queue)
 		if active?
-			event_queue << [@output_id, @id, activation]
+			activation = activate
+			if activation != nil
+				event_queue << [@output_id, @id, activation]
+			end
 		end
 	end
 

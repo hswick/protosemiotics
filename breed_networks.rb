@@ -11,7 +11,8 @@ def init_population(n)
 end
 
 def test_fitness(network)
-	network.simulate#Returns number of timesteps organism survived
+	n = network.simulate#Returns number of timesteps organism survived
+	n
 end
 
 def test_population_fitness(population)
@@ -34,7 +35,13 @@ end
 
 def birth(genes)
 	if rand(100) == 0#0.01 probability
-		mutation!(genes[rand(genes.length)])
+		#mutation
+		gene1 = genes[rand(genes.length)]
+		gene2 = genes[rand(genes.length)]
+		i = rand(gene1.length)
+		tmp = gene1[i]
+		gene1[i] = gene2[i]
+		gene2[i] = tmp
 	end
 	Network.new.from_genes(genes)
 end
@@ -58,20 +65,22 @@ population_count = 10
 
 population = init_population(population_count)
 
-new_population = population_mixture(population) do |net1, net2| 
-	breed(net1, net2)
+for i in 0..100
+	new_population = population_mixture(population) do |net1, net2| 
+		breed(net1, net2)
+	end	
+
+	new_population = untwinify(new_population)
+
+	fitness_net_tuples = test_population_fitness(new_population)	
+
+	population = fitness_net_tuples.sort_by { |fitness_net| 
+		fitness_net[0]
+	}.reverse.slice(0, population_count).map {|fitness_net|
+		fitness_net[1]
+	}
 end
-
-new_population = untwinify(new_population)
-
-fitness_net_tuples = test_population_fitness(new_population)
-
-population = fitness_net_tuples.sort_by { |fitness_net| 
-	fitness_net[0]
-}.reverse.slice(0, population_count).map {|fitness_net|
-	fitness_net[1]
-}
 
 puts test_population_fitness(population)
 
-population[0].dump_log
+puts population.map {|net| net.nodes.length}

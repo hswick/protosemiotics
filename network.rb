@@ -5,7 +5,7 @@ require './node'
 class Network
 	def initialize(num_nodes=0, id_range = 100, num_act_fns=5)
 		@nodes = {}
-		for i in 0..num_nodes
+		for i in 0..num_nodes-1
 			@nodes[i] = Node.new(i, rand(num_act_fns), rand(id_range), rand_weight, rand_weight)
 		end
 
