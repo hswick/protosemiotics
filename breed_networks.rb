@@ -5,14 +5,13 @@ require 'Set'
 def init_population(n)
 	population = []
 	for i in 0..n
-		population << Network.new(10, 10)
+		population << Network.new(10, 100)#exponential time increases
 	end
 	population
 end
 
 def test_fitness(network)
-	n = network.simulate#Returns number of timesteps organism survived
-	n
+	[network.simulate, network.nodes.length]#Returns number of timesteps organism survived
 	#network.edges.length
 end
 
@@ -64,24 +63,30 @@ def mean(nums)
 	sum/nums.length
 end
 
-population_count = 50
+population_count = 50#exponential time increase
 
 population = init_population(population_count)
 
-for i in 0..10
+puts "Initial population average fitness " + mean(test_population_fitness(population).map{|x|x[0][0]}).to_s
+
+for i in 0..20#linear time increase
+
 	new_population = population_mixture(population) do |net1, net2| 
 		breed(net1, net2)
-	end	
+	end
 
 	new_population = untwinify(new_population)
 
-	fitness_net_tuples = test_population_fitness(new_population)	
+	fitness_net_tuples = test_population_fitness(new_population)
 
 	population = fitness_net_tuples.sort_by { |fitness_net| 
-		fitness_net[0]
+		[fitness_net[0][0], -fitness_net[0][1]]
 	}.reverse.slice(0, population_count).map {|fitness_net|
 		fitness_net[1]
 	}
+	puts "Finished generation " + i.to_s
+	puts "Average node count " + mean(population.map{|n|n.nodes.length}).to_s
+	puts "Average edge count " + mean(population.map{|n|n.edges.length}).to_s
 end
 
-population.each {|net| print net.edges.length.to_s + "\n"}
+puts mean(test_population_fitness(population).map{|x|x[0][0]})

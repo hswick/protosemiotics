@@ -79,4 +79,9 @@ class Node
 	def to_gene
 		[@activation, @output_id, @init_edge_states[0], @init_edge_states[1]]
 	end
+
+	def reset
+		@edge_state1 = @init_edge_states[0]
+		@edge_state2 = @init_edge_states[1]
+	end
 end

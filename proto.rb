@@ -28,9 +28,11 @@ def output_event_queue
 	print @net.event_queue.to_s + "\n"
 end
 
-@net2 = Network.new(10)
+@net2 = Network.new(10, 10)
 
 #print @net.to_genes.to_s + "\n"
 # print @net2.to_genes.to_s + "\n"
 
-print crossover_gene_matrices(@net.to_genes, @net2.to_genes).to_s
+#print crossover_gene_matrices(@net.to_genes, @net2.to_genes).to_s
+
+puts @net2.simulate

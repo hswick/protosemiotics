@@ -89,13 +89,20 @@ class Network
 		out
 	end
 
-	def simulate(max_timesteps=10)
+	def reset
+		@nodes.each do |id, n|
+			n.reset
+		end
+	end
+
+	def simulate(max_timesteps=100)
 		i = 0
 		stopped = false
 		until i == max_timesteps || stopped
 			stopped = timestep
 			i+=1
 		end
+		reset
 		i
 	end
 
