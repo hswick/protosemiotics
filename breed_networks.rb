@@ -34,7 +34,7 @@ def population_mixture(population, &fn)
 end
 
 def birth(genes)
-	if rand(100) == 0#0.01 probability
+	if rand(100) >= 4#0.01 probability because 4 values of genes
 		mutation!(genes[rand(genes.length)])
 	end
 	Network.new.from_genes(genes)
@@ -63,7 +63,7 @@ def mean(nums)
 	sum/nums.length
 end
 
-population_count = 50#exponential time increase
+population_count = 200#exponential time increase
 
 population = init_population(population_count)
 
@@ -80,8 +80,8 @@ for i in 0..20#linear time increase
 	fitness_net_tuples = test_population_fitness(new_population)
 
 	population = fitness_net_tuples.sort_by { |fitness_net| 
-		[fitness_net[0][0], -fitness_net[0][1]]
-	}.reverse.slice(0, population_count).map {|fitness_net|
+		[-fitness_net[0][0], fitness_net[0][1]]#Default sorting ascending
+	}.slice(0, population_count).map {|fitness_net|
 		fitness_net[1]
 	}
 	puts "Finished generation " + i.to_s
