@@ -61,7 +61,7 @@ def untwinify(twins)
 	output
 end
 
-population_count = 10
+population_count = 100
 
 population = init_population(population_count)
 
