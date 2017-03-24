@@ -109,14 +109,20 @@ class Network
 
 	def to_genes
 		genes = []
+		n = nodes[0].to_gene.length
+		for i in 0..n-1
+			genes << []
+		end
 		for i in 0..nodes.length-1
-			genes << nodes[i].to_gene
+			nodes[i].to_gene.each_with_index do |dna, j|
+				genes[j] << dna
+			end
 		end
 		genes
 	end
 
 	def from_genes(genes)
-		genes.each_with_index do |gene, i|
+		genes.transpose.each_with_index do |gene, i|
 			@nodes[i] = Node.new(i, gene[0], gene[1], gene[2], gene[3])
 		end
 		setup_state

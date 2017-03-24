@@ -20,6 +20,7 @@
 
 require './network'
 require './genetic_algorithm'
+require './node'
 
 @net = Network.new(10)
 
@@ -27,15 +28,9 @@ def output_event_queue
 	print @net.event_queue.to_s + "\n"
 end
 
-@net.simulate
+@net2 = Network.new(10)
 
-#@net.dump_log
+#print @net.to_genes.to_s + "\n"
+# print @net2.to_genes.to_s + "\n"
 
-genes = @net.to_genes
-
-@net2 = Network.new.from_genes(genes)
-
-@net2.simulate
-
-@net2.dump_log
-
+print crossover_gene_matrices(@net.to_genes, @net2.to_genes).to_s

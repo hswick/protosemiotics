@@ -5,7 +5,7 @@ require 'Set'
 def init_population(n)
 	population = []
 	for i in 0..n
-		population << Network.new(10, 100)
+		population << Network.new(10, 10)
 	end
 	population
 end
@@ -13,6 +13,7 @@ end
 def test_fitness(network)
 	n = network.simulate#Returns number of timesteps organism survived
 	n
+	#network.edges.length
 end
 
 def test_population_fitness(population)
@@ -35,13 +36,7 @@ end
 
 def birth(genes)
 	if rand(100) == 0#0.01 probability
-		#mutation
-		gene1 = genes[rand(genes.length)]
-		gene2 = genes[rand(genes.length)]
-		i = rand(gene1.length)
-		tmp = gene1[i]
-		gene1[i] = gene2[i]
-		gene2[i] = tmp
+		mutation!(genes[rand(genes.length)])
 	end
 	Network.new.from_genes(genes)
 end
@@ -61,11 +56,19 @@ def untwinify(twins)
 	output
 end
 
-population_count = 100
+def mean(nums)
+	sum = 0.0
+	nums.each do |n|
+		sum += n
+	end
+	sum/nums.length
+end
+
+population_count = 50
 
 population = init_population(population_count)
 
-for i in 0..100
+for i in 0..10
 	new_population = population_mixture(population) do |net1, net2| 
 		breed(net1, net2)
 	end	
@@ -81,6 +84,4 @@ for i in 0..100
 	}
 end
 
-puts test_population_fitness(population)
-
-puts population.map {|net| net.nodes.length}
+population.each {|net| print net.edges.length.to_s + "\n"}
