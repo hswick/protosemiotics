@@ -18,7 +18,7 @@ class Network
 		connect_nodes
 
 		@event_queue = []
-		@logging = true
+		@logging = false
 		@log = []
 		@timesteps = 0
 	end
