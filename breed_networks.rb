@@ -16,27 +16,9 @@ def test_fitness(network)
 end
 
 #Should pass in net index not net to save memory
-def test_population_fitness(population)
-	population.map {|net| [test_fitness(net), net]}
-end
-
 #Would later have to reconstruct it from index
-def test_population_fitness2(population)
-	population.map.with_index {|net, i| [test_population_fitness(net), i]}
-end
-
-def population_mixture(population, &fn)
-	output = []
-	mix_set = Set.new
-	population.each do |p1|
-		population.each do |p2|
-			if !mix_set.include?([p2, p1]) && !mix_set.include?([p1, p2])
-				output << fn.call(p1, p2)
-				mix_set << [p1, p2]
-			end
-		end
-	end
-	output
+def test_population_fitness(population)
+	population.map.with_index {|net, i| [test_fitness(net), i]}
 end
 
 #Optimization of population_mixture
@@ -70,15 +52,6 @@ def breed(a, b)
 	[birth(offspring[0]), birth(offspring[1])]
 end
 
-def untwinify(twins)
-	output = []
-	twins.each do |twin|
-		output << twin[0]
-		output << twin[1]
-	end
-	output
-end
-
 def mean(nums)
 	sum = 0.0
 	nums.each do |n|
@@ -91,23 +64,17 @@ population_count = 200#exponential time increase
 
 population = init_population(population_count)
 
-puts "Initial population average fitness " + mean(test_population_fitness(population).map{|x|x[0][0]}).to_s
+#puts "Initial population average fitness " + mean(test_population_fitness(population).map{|x|x[0][0]}).to_s
 
 # for i in 0..20#linear time increase
 
-	start = Time::now
-	new_population = population_mixture(population) do |net1, net2| 
-		breed(net1, net2)
-	end
+	
 
-	 new_population = untwinify(new_population)
-
-	#new_population = pop_mix_optimized(population)
+	new_population = pop_mix_optimized(population)
 
 	puts new_population.length
 
-	finish = Time::now
-	puts "Time processing " + (finish-start).to_s
+	start = Time::now
 
 	fitness_net_tuples = test_population_fitness(new_population)
 
@@ -117,7 +84,10 @@ puts "Initial population average fitness " + mean(test_population_fitness(popula
 
 	simulation_scores = fitnesses.map {|fitness_net| fitness_net[0][0]}
 
-	population = fitnesses.map {|fitness_net| fitness_net[1]}
+	population = fitnesses.map {|fitness_net| new_population[fitness_net[1]]}
+
+	finish = Time::now
+	puts "Time processing " + (finish-start).to_s
 	# puts "Finished generation " + i.to_s
 	puts "Average simulation score " + mean(simulation_scores).to_s
 	puts "Average node count " + mean(population.map{|n|n.nodes.length}).to_s
