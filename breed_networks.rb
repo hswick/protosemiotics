@@ -64,17 +64,11 @@ population_count = 200#exponential time increase
 
 population = init_population(population_count)
 
-#puts "Initial population average fitness " + mean(test_population_fitness(population).map{|x|x[0][0]}).to_s
+puts "Initial population average fitness " + mean(test_population_fitness(population).map{|x|x[0][0]}).to_s
 
-# for i in 0..20#linear time increase
-
-	
-
+start = Time::now
+for i in 0..20#linear time increase
 	new_population = pop_mix_optimized(population)
-
-	puts new_population.length
-
-	start = Time::now
 
 	fitness_net_tuples = test_population_fitness(new_population)
 
@@ -86,12 +80,13 @@ population = init_population(population_count)
 
 	population = fitnesses.map {|fitness_net| new_population[fitness_net[1]]}
 
-	finish = Time::now
-	puts "Time processing " + (finish-start).to_s
-	# puts "Finished generation " + i.to_s
+	puts "Finished generation " + i.to_s
 	puts "Average simulation score " + mean(simulation_scores).to_s
 	puts "Average node count " + mean(population.map{|n|n.nodes.length}).to_s
 	puts "Average edge count " + mean(population.map{|n|n.edges.length}).to_s
-# end
+end
 
 # puts "Average performance: " + mean(test_population_fitness(population).map{|x|x[0][0]}).to_s
+
+finish = Time::now
+puts "Time processing " + (finish-start).to_s
