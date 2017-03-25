@@ -96,13 +96,15 @@ puts "Initial population average fitness " + mean(test_population_fitness(popula
 # for i in 0..20#linear time increase
 
 	start = Time::now
-	# new_population = population_mixture(population) do |net1, net2| 
-	# 	breed(net1, net2)
-	# end
+	new_population = population_mixture(population) do |net1, net2| 
+		breed(net1, net2)
+	end
 
-	#  new_population = untwinify(new_population)
+	 new_population = untwinify(new_population)
 
-	new_population = pop_mix_optimized(population)
+	#new_population = pop_mix_optimized(population)
+
+	puts new_population.length
 
 	finish = Time::now
 	puts "Time processing " + (finish-start).to_s
