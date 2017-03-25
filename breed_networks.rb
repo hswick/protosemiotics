@@ -45,11 +45,11 @@ def pop_mix_optimized(population)
 	n2 = n
 	output = []
 	for i in 0..n-1
-		for j in 0..n2-1
+		for j in i..n2-1
 			if i != j
 				result = crossover_gene_matrices(population[i].to_genes, population[j].to_genes)
-				output << result[0]
-				output << result[1]
+				output << birth(result[0])
+				output << birth(result[1])
 			end
 		end
 		n2-=1
@@ -93,13 +93,19 @@ population = init_population(population_count)
 
 puts "Initial population average fitness " + mean(test_population_fitness(population).map{|x|x[0][0]}).to_s
 
-for i in 0..20#linear time increase
+# for i in 0..20#linear time increase
 
-	new_population = population_mixture(population) do |net1, net2| 
-		breed(net1, net2)
-	end
+	start = Time::now
+	# new_population = population_mixture(population) do |net1, net2| 
+	# 	breed(net1, net2)
+	# end
 
-	new_population = untwinify(new_population)
+	#  new_population = untwinify(new_population)
+
+	new_population = pop_mix_optimized(population)
+
+	finish = Time::now
+	puts "Time processing " + (finish-start).to_s
 
 	fitness_net_tuples = test_population_fitness(new_population)
 
@@ -110,10 +116,10 @@ for i in 0..20#linear time increase
 	simulation_scores = fitnesses.map {|fitness_net| fitness_net[0][0]}
 
 	population = fitnesses.map {|fitness_net| fitness_net[1]}
-	puts "Finished generation " + i.to_s
+	# puts "Finished generation " + i.to_s
 	puts "Average simulation score " + mean(simulation_scores).to_s
 	puts "Average node count " + mean(population.map{|n|n.nodes.length}).to_s
 	puts "Average edge count " + mean(population.map{|n|n.edges.length}).to_s
-end
+# end
 
-puts mean(test_population_fitness(population).map{|x|x[0][0]})
+# puts "Average performance: " + mean(test_population_fitness(population).map{|x|x[0][0]}).to_s
