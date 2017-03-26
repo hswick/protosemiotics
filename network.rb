@@ -129,6 +129,7 @@ class Network
 	end
 
 	def from_genes(genes)
+		#Transposition could potentially get optimized by gpu
 		genes.transpose.each_with_index do |gene, i|
 			@nodes[i] = Node.new(i, gene[0], gene[1], gene[2], gene[3])
 		end
